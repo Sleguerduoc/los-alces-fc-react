@@ -1,9 +1,12 @@
+
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   validarNombre, rutValido, formatRut, emailValido, telValido,
   numeroPositivo, numeroNoNegativo, fechaNoFutura, maxLen
 } from "../utils/validators";
+import { createStaff } from "../services/staffService";
+
 
 export default function StaffNew() {
   const nav = useNavigate();
@@ -66,7 +69,7 @@ export default function StaffNew() {
   const invalid = (name) => touched[name] && errors[name];
   const isValidForm = Object.values(errors).every((e) => e === "");
 
-  const onSubmit = (e) => {
+   const onSubmit = async (e) => {
     e.preventDefault();
     setTouched({
       nombre: true,
@@ -82,11 +85,31 @@ export default function StaffNew() {
     });
     if (!isValidForm) return;
 
+    try {
+      const payload = {
+        nombre: form.nombre,
+        rut: form.rut,
+        cargo: form.cargo,
+        correo: form.correo,
+        telefono: form.telefono,
+        sueldo: form.sueldo,
+        valorHora: form.valorHora === "" ? 0 : form.valorHora,
+        fechaIngreso: form.fechaIngreso,
+        observaciones: form.observaciones,
+        // Por ahora la foto solo se usa en front (preview), no se sube al backend
+        // foto: "", // si quieres, más adelante podemos guardar un nombre.
+      };
 
-    console.log("Nuevo miembro (payload):", form);
-    alert(`Miembro "${form.nombre}" registrado con éxito ✅`);
-    nav("/equipo-tecnico");
+      await createStaff(payload);
+
+      alert(`Miembro "${form.nombre}" registrado con éxito ✅`);
+      nav("/equipo-tecnico");
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "Error al registrar miembro del staff");
+    }
   };
+
 
   return (
     <div className="container-md py-4">

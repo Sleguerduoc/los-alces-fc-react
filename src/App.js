@@ -1,5 +1,6 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./pages/Login";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome";
@@ -23,141 +24,155 @@ function PrivateRoute({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <DashboardHome />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/jugadores"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <PlayersPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/jugadores/nuevo"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <PlayerNew />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/equipo-tecnico"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <StaffPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/equipo-tecnico/nuevo"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <StaffNew />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/estadisticas"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <StatsPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/finanzas"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <FinancePage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/socios"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <SociosPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/socios/nuevo"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <SocioNew />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/reportes"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <ReportsPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/merch"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <MerchPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/perfil"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <ProfilePage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/configuracion"
-          element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <SettingsPage />
-              </DashboardLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {/* Login público en "/" */}
+      <Route path="/" element={<Login />} />
+
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <DashboardHome />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/jugadores"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <PlayersPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/jugadores/nuevo"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <PlayerNew />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/equipo-tecnico"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <StaffPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/equipo-tecnico/nuevo"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <StaffNew />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/estadisticas"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <StatsPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/finanzas"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <FinancePage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/socios"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <SociosPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/socios/nuevo"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <SocioNew />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/reportes"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <ReportsPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/merch"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <MerchPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/perfil"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <ProfilePage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/configuracion"
+        element={
+          <PrivateRoute>
+            <DashboardLayout>
+              <SettingsPage />
+            </DashboardLayout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Cualquier ruta desconocida redirige al login */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

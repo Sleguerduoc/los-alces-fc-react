@@ -1,20 +1,58 @@
-// src/pages/StaffPage.js
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StaffFilters from "../components/staff/StaffFilters";
 import StaffGrid from "../components/staff/StaffGrid";
 import StaffDetail from "../components/staff/StaffDetail";
 
-
-import STAFF, { imageForStaff } from "../data/staff";
+import { getStaff } from "../services/staffService";
 
 export default function StaffPage() {
-  
-  const [staff] = useState(STAFF);
+  const [staff, setStaff] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
 
   // filtros
   const [text, setText] = useState("");
   const [cargo, setCargo] = useState("");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const nav = useNavigate();
+
+
+  const mapStaffFromApi = (s) => ({
+    id: s._id,
+    nombre: s.nombre,
+    cargo: s.cargo,
+    correo: s.correo || "",
+    telefono: s.telefono || "",
+    sueldo: s.sueldo ?? 0,
+    extra: s.valorHora ?? 0,      
+    obs: s.observaciones || "",
+    horas: s.horas ?? 0,          
+    foto: s.foto || "placeholder.jpg",
+  });
+
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const data = await getStaff();
+        const adaptados = data.map(mapStaffFromApi);
+        setStaff(adaptados);
+        if (adaptados.length > 0) {
+          setSelectedId(adaptados[0].id);
+        }
+      } catch (e) {
+        console.error(e);
+        setError("Error al cargar equipo técnico desde el servidor");
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargar();
+  }, []);
 
   const filtered = useMemo(() => {
     const t = text.trim().toLowerCase();
@@ -24,13 +62,23 @@ export default function StaffPage() {
     );
   }, [staff, text, cargo]);
 
-  const [selectedId, setSelectedId] = useState(staff[0]?.id ?? null);
   const seleccionado = useMemo(
     () => staff.find((s) => s.id === selectedId) || null,
     [staff, selectedId]
   );
 
-  const nav = useNavigate();
+  
+  const getStaffImg = (fileName) => {
+    try {
+      return require(`../assets/img/staff/${fileName}`);
+    } catch {
+      try {
+        return require(`../assets/img/staff/placeholder.jpg`);
+      } catch {
+        return "";
+      }
+    }
+  };
 
   return (
     <>
@@ -45,6 +93,17 @@ export default function StaffPage() {
           Nuevo Miembro
         </button>
       </div>
+
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+      {loading && (
+        <div className="alert alert-info" role="alert">
+          Cargando equipo técnico…
+        </div>
+      )}
 
       {/* Filtros */}
       <div className="card mb-4">
@@ -70,17 +129,12 @@ export default function StaffPage() {
         <div className="mb-4">
           <div className="card">
             <div className="card-body d-flex">
-              {(() => {
-                const src = imageForStaff(seleccionado.foto || "placeholder.jpg");
-                return (
-                  <img
-                    src={src}
-                    alt={seleccionado.nombre}
-                    className="rounded-circle me-3"
-                    style={{ width: 80, height: 80, objectFit: "cover" }}
-                  />
-                );
-              })()}
+              <img
+                src={getStaffImg(seleccionado.foto || "placeholder.jpg")}
+                alt={seleccionado.nombre}
+                className="rounded-circle me-3"
+                style={{ width: 80, height: 80, objectFit: "cover" }}
+              />
               <div>
                 <h5 className="mb-1">{seleccionado.nombre}</h5>
                 <p className="mb-1">{seleccionado.cargo}</p>
@@ -93,7 +147,7 @@ export default function StaffPage() {
         </div>
       )}
 
-      {/* Formulario de detalle */}
+      {/* Formulario de detalle  */}
       <section className="card mb-5">
         <div className="card-body">
           <StaffDetail staff={seleccionado} />

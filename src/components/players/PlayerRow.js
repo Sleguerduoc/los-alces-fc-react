@@ -1,36 +1,64 @@
 import React from "react";
-
-
-const badgeClass = (estado) => {
-  if (estado === "Activo") return "bg-success";
-  if (estado === "Lesionado") return "bg-warning";
-  return "bg-secondary";
-};
+import { getPlayerImage } from "../../utils/getPlayerImage";
 
 export default function PlayerRow({ data, onPick }) {
-  const fotoSrc = (() => {
-    try {
-      return require(`../../assets/img/jugadores/${data.foto}`);
-    } catch {
-      return null; 
-    }
-  })();
+  const handleClick = () => {
+    if (onPick) onPick(data.id);
+  };
 
   return (
-    <tr onClick={() => onPick(data.id)} style={{ cursor: "pointer" }}>
+    <tr onClick={handleClick} style={{ cursor: "pointer" }}>
+      {/* FOTO */}
       <td>
-        {fotoSrc ? (
-          <img src={fotoSrc} alt={data.nombre} className="img-thumbnail" style={{ maxWidth: 60 }} />
-        ) : (
-          <div className="bg-light rounded" style={{ width: 60, height: 60 }} />
-        )}
+        <img
+          src={getPlayerImage(data.foto)}
+          alt={data.nombre}
+          className="img-thumbnail"
+          style={{
+            width: "48px",
+            height: "48px",
+            objectFit: "cover",
+            borderRadius: "50%",
+          }}
+        />
       </td>
+
+      {/* NOMBRE */}
       <td>{data.nombre}</td>
-      <td>{data.posicion}</td>
-      <td><span className={`badge ${badgeClass(data.estado)}`}>{data.estado}</span></td>
+
+      {/* POSICIÓN */}
+      <td>{data.posicion || "—"}</td>
+
+      {/* ESTADO */}
       <td>
-        <button className="btn btn-sm btn-primary me-2"><i className="fas fa-edit"></i></button>
-        <button className="btn btn-sm btn-danger"><i className="fas fa-trash"></i></button>
+        <span
+          className={
+            "badge " +
+            (data.estado === "Activo"
+              ? "bg-success"
+              : data.estado === "Lesionado"
+              ? "bg-warning text-dark"
+              : data.estado === "Suspendido"
+              ? "bg-danger"
+              : "bg-secondary")
+          }
+        >
+          {data.estado || "Sin estado"}
+        </span>
+      </td>
+
+      {/* ACCIONES */}
+      <td>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-primary"
+          onClick={(e) => {
+            e.stopPropagation(); // que no dispare el onClick del <tr>
+            if (onPick) onPick(data.id);
+          }}
+        >
+          Ver detalle
+        </button>
       </td>
     </tr>
   );
