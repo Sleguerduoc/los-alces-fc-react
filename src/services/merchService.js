@@ -22,7 +22,7 @@ export async function getProductosMerch() {
         const body = await resp.json();
         if (body && body.mensaje) mensaje = body.mensaje;
         } catch {
-            // No hacer nada
+            
         }
         throw new Error(mensaje);
     }

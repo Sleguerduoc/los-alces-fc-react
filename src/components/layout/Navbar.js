@@ -5,7 +5,7 @@ import logo from "../../assets/img/logo/logo.png";
 export default function Header() {
   const nav = useNavigate();
 
-  // Leer usuario desde localStorage (si existe)
+ 
   let userName = "Usuario";
   try {
     const raw = localStorage.getItem("siga_user");
@@ -16,7 +16,7 @@ export default function Header() {
       }
     }
   } catch {
-    // si falla el parseo, dejamos "Usuario"
+   
   }
 
   const logout = () => {
@@ -53,7 +53,7 @@ export default function Header() {
           SIGA – LOS ALCES F.C.
         </NavLink>
 
-        {/* derecha (notificaciones + usuario) */}
+        {/* derecha */}
         <div className="ms-auto d-none d-lg-flex align-items-center">
           {/* Notificaciones */}
           <div className="dropdown me-3">

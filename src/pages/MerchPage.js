@@ -21,7 +21,7 @@ const money = (clp) =>
     const [onlyStock, setOnlyStock] = useState("all");
     const [sort, setSort] = useState("relevant");
 
-    // Carrito (en localStorage)
+    // Carrito 
     const [cart, setCart] = useState(() => {
         try {
         return JSON.parse(localStorage.getItem("merch_cart")) || [];
@@ -34,7 +34,7 @@ const money = (clp) =>
         localStorage.setItem("merch_cart", JSON.stringify(cart));
     }, [cart]);
 
-  // Cargar productos desde la API al montar el componente
+  // Cargar productos desde la API 
     useEffect(() => {
         let isMounted = true;
 
@@ -66,7 +66,7 @@ const money = (clp) =>
         };
     }, []);
 
-    // Lista filtrada/ordenada
+    
     const list = useMemo(() => {
         const txt = query.trim().toLowerCase();
 
@@ -91,12 +91,12 @@ const money = (clp) =>
             case "name_desc":
                 return b.name.localeCompare(a.name);
             default:
-                return 0; // relevancia (por ahora, sin cambio)
+                return 0; 
             }
         });
     }, [products, query, category, onlyStock, sort]);
 
-    // Carrito: agregar / cambiar / quitar
+    // Carrito
     const addToCart = (id) => {
         const p = products.find((x) => x.id === id);
         if (!p) return;
